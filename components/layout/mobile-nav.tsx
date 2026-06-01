@@ -14,7 +14,7 @@ export function MobileNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-white border-t border-zinc-200 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-background border-t border-border z-50">
       <div className="flex">
         {navItems.map(({ href, label, icon: Icon }) => (
           <Link

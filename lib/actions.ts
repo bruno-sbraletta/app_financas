@@ -52,10 +52,14 @@ export async function createTransaction(data: TransactionFormData) {
 
 export async function updateTransaction(id: string, data: TransactionFormData) {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: "Não autenticado" }
+
   const { error } = await supabase
     .from("transactions")
     .update(data)
     .eq("id", id)
+    .eq("user_id", user.id)
   if (error) return { error: error.message }
   revalidatePath("/dashboard")
   revalidatePath("/transactions")
@@ -64,7 +68,14 @@ export async function updateTransaction(id: string, data: TransactionFormData) {
 
 export async function deleteTransaction(id: string) {
   const supabase = await createClient()
-  const { error } = await supabase.from("transactions").delete().eq("id", id)
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: "Não autenticado" }
+
+  const { error } = await supabase
+    .from("transactions")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id)
   if (error) return { error: error.message }
   revalidatePath("/dashboard")
   revalidatePath("/transactions")

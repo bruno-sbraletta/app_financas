@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/header"
 import { SummaryCards } from "@/components/dashboard/summary-cards"
 import { CategoryChart } from "@/components/dashboard/category-chart"
 import { PeriodSelector } from "@/components/dashboard/period-selector"
+import { QuickAddButton } from "@/components/dashboard/quick-add-button"
 import { Transaction, DashboardSummary } from "@/lib/types"
 
 interface PageProps {
@@ -27,6 +28,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const { data: transactions } = await supabase
     .from("transactions")
     .select("*")
+    .eq("user_id", user.id)
     .gte("date", startDate)
     .lte("date", endDateStr)
     .order("date", { ascending: false })
@@ -54,7 +56,10 @@ export default async function DashboardPage({ searchParams }: PageProps) {
             <h2 className="font-semibold text-zinc-900">Resumo do mês</h2>
             <p className="text-sm text-zinc-500">Visão consolidada das suas finanças</p>
           </div>
-          <PeriodSelector month={month} year={year} />
+          <div className="flex items-center gap-3">
+            <QuickAddButton />
+            <PeriodSelector month={month} year={year} />
+          </div>
         </div>
 
         <SummaryCards summary={summary} />

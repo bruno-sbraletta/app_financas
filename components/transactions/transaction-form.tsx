@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -42,6 +42,18 @@ export function TransactionForm({
     type: transaction?.type ?? "despesa",
     category: transaction?.category ?? "Outros",
   })
+
+  useEffect(() => {
+    if (open) {
+      setFormData({
+        description: transaction?.description ?? "",
+        amount: transaction?.amount ?? 0,
+        date: transaction?.date ?? new Date().toISOString().split("T")[0],
+        type: transaction?.type ?? "despesa",
+        category: transaction?.category ?? "Outros",
+      })
+    }
+  }, [open, transaction])
 
   function handleChange(field: keyof TransactionFormData, value: string | number) {
     setFormData((prev) => ({ ...prev, [field]: value }))

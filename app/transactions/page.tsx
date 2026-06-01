@@ -36,6 +36,7 @@ export default async function TransactionsPage({ searchParams }: PageProps) {
   let query = supabase
     .from("transactions")
     .select("*")
+    .eq("user_id", user.id)
     .gte("date", startDate)
     .lte("date", endDateStr)
     .order("date", { ascending: false })
